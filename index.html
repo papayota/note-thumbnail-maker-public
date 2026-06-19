@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>noteサムネイルメーカー</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="controls" aria-label="サムネイル設定">
+        <div>
+          <h1>noteサムネイルメーカー</h1>
+        </div>
+
+        <fieldset class="category-group">
+          <legend>カテゴリ</legend>
+          <label>
+            <input type="radio" name="category" value="claude" checked>
+            <span>Claude</span>
+          </label>
+          <label>
+            <input type="radio" name="category" value="codex">
+            <span>Codex</span>
+          </label>
+          <label>
+            <input type="radio" name="category" value="zatsudan">
+            <span>雑談</span>
+          </label>
+        </fieldset>
+
+        <label class="title-field" for="titleInput">
+          <span>タイトル</span>
+          <textarea id="titleInput" rows="4" placeholder="note記事のタイトルを入力"></textarea>
+        </label>
+
+        <div class="status-row">
+          <p id="fitStatus" class="fit-status" aria-live="polite"></p>
+          <button id="downloadButton" type="button">PNGダウンロード</button>
+        </div>
+      </section>
+
+      <section class="preview" aria-label="プレビュー">
+        <canvas id="thumbnailCanvas" width="1280" height="720"></canvas>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
