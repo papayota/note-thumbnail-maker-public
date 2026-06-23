@@ -22,18 +22,20 @@ const templates = {
     minFontSize: 44,
     fontFamily: '"Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif',
     fontWeight: 800,
+    textScaleY: 1.1,
     bandTop: 114,
     bandHeight: 386,
     maxWidth: 1040,
-    lineHeightRatio: 1.46
+    twoLineMaxWidth: 1240,
+    lineHeightRatio: 1.72
   },
   codex: {
     label: "Codex",
     background: "assets/codex.png",
     textColor: "#111111",
-    strokeColor: "#f28c28",
-    strokeWidth: 2,
-    shadowColor: "rgba(242, 140, 40, 0.9)",
+    strokeColor: "#ffffff",
+    strokeWidth: 3,
+    shadowColor: "rgba(120, 190, 255, 0.9)",
     shadowBlur: 9,
     shadowOffsetX: 3,
     shadowOffsetY: 4,
@@ -41,10 +43,12 @@ const templates = {
     minFontSize: 44,
     fontFamily: '"Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif',
     fontWeight: 800,
+    textScaleY: 1.1,
     bandTop: 114,
     bandHeight: 386,
     maxWidth: 1040,
-    lineHeightRatio: 1.46
+    twoLineMaxWidth: 1240,
+    lineHeightRatio: 1.72
   },
   zatsudan: {
     label: "雑談",
@@ -58,10 +62,12 @@ const templates = {
     minFontSize: 42,
     fontFamily: '"Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif',
     fontWeight: 800,
+    textScaleY: 1.1,
     bandTop: 212,
     bandHeight: 290,
     maxWidth: 1040,
-    lineHeightRatio: 1.48
+    twoLineMaxWidth: 1220,
+    lineHeightRatio: 1.74
   }
 };
 
@@ -227,10 +233,12 @@ function getManualTitleLines(text) {
 }
 
 function fitManualTitleLines(lines, template) {
+  const maxWidth = lines.length >= 2 ? template.twoLineMaxWidth || template.maxWidth : template.maxWidth;
+
   for (let fontSize = template.fontSize; fontSize >= template.minFontSize; fontSize -= 2) {
     setFont(template, fontSize);
 
-    if (lines.every((line) => ctx.measureText(line).width <= template.maxWidth)) {
+    if (lines.every((line) => ctx.measureText(line).width <= maxWidth)) {
       return {
         lines,
         fontSize,
@@ -243,7 +251,7 @@ function fitManualTitleLines(lines, template) {
   setFont(template, template.minFontSize);
 
   return {
-    lines: lines.map((line) => ellipsize(line, template.maxWidth)),
+    lines: lines.map((line) => ellipsize(line, maxWidth)),
     fontSize: template.minFontSize,
     truncated: true,
     placeholder: false
@@ -270,12 +278,14 @@ function fitTitleLines(text, template) {
 
   for (let fontSize = template.fontSize; fontSize >= template.minFontSize; fontSize -= 2) {
     setFont(template, fontSize);
-    const lineBreak = findBestLineBreak(text, template.maxWidth);
+    const maxWidth = template.twoLineMaxWidth || template.maxWidth;
+    const lineBreak = findBestLineBreak(text, maxWidth);
     const lines = lineBreak.lines;
-    const fits = lines.length <= 2 && lines.every((line) => ctx.measureText(line).width <= template.maxWidth);
+    const widthLimit = lines.length >= 2 ? maxWidth : template.maxWidth;
+    const fits = lines.length <= 2 && lines.every((line) => ctx.measureText(line).width <= widthLimit);
 
     if (fits) {
-      const score = lineBreak.score + (template.fontSize - fontSize) * 8;
+      const score = lineBreak.score + (template.fontSize - fontSize) * 42;
       const fit = {
         lines,
         fontSize,
@@ -325,12 +335,18 @@ function drawTitle(template, title) {
 
   fitted.lines.forEach((line, index) => {
     const y = firstY + index * lineHeight;
+    const scaleY = template.textScaleY || 1;
+
+    ctx.save();
+    ctx.translate(centerX, y);
+    ctx.scale(1, scaleY);
 
     if (template.strokeWidth) {
-      ctx.strokeText(line, centerX, y);
+      ctx.strokeText(line, 0, 0);
     }
 
-    ctx.fillText(line, centerX, y);
+    ctx.fillText(line, 0, 0);
+    ctx.restore();
   });
 
   ctx.shadowColor = "transparent";
