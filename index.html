@@ -7,43 +7,78 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <main class="app">
-      <section class="controls" aria-label="サムネイル設定">
-        <div>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="brand-copy">
           <h1>noteサムネイルメーカー</h1>
+          <p>Thumbnail Studio</p>
         </div>
+      </header>
 
-        <fieldset class="category-group">
-          <legend>カテゴリ</legend>
-          <label>
-            <input type="radio" name="category" value="claude" checked>
-            <span>Claude</span>
-          </label>
-          <label>
-            <input type="radio" name="category" value="codex">
-            <span>Codex</span>
-          </label>
-          <label>
-            <input type="radio" name="category" value="zatsudan">
-            <span>雑談</span>
-          </label>
-        </fieldset>
+      <main class="workspace">
+        <section class="controls" aria-label="サムネイル設定">
+          <div class="panel-heading">
+            <p class="panel-kicker">編集</p>
+            <h2>サムネイル設定</h2>
+          </div>
 
-        <label class="title-field" for="titleInput">
-          <span>タイトル</span>
-          <textarea id="titleInput" rows="4" placeholder="note記事のタイトルを入力"></textarea>
-        </label>
+          <fieldset class="category-group">
+            <legend>カテゴリ</legend>
+            <div class="category-options">
+              <label>
+                <input type="radio" name="category" value="claude" checked>
+                <span>Claude</span>
+              </label>
+              <label>
+                <input type="radio" name="category" value="codex">
+                <span>Codex</span>
+              </label>
+              <label>
+                <input type="radio" name="category" value="zatsudan">
+                <span>雑談</span>
+              </label>
+            </div>
+          </fieldset>
 
-        <div class="status-row">
+          <label class="title-field" for="titleInput">
+            <span>タイトル</span>
+            <textarea id="titleInput" rows="5" placeholder="note記事のタイトルを入力"></textarea>
+          </label>
+
           <p id="fitStatus" class="fit-status" aria-live="polite"></p>
-          <button id="downloadButton" type="button">PNGダウンロード</button>
-        </div>
-      </section>
 
-      <section class="preview" aria-label="プレビュー">
-        <canvas id="thumbnailCanvas" width="1280" height="720"></canvas>
-      </section>
-    </main>
+          <button id="downloadButton" class="download-button" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M12 3v12"></path>
+              <path d="m7 10 5 5 5-5"></path>
+              <path d="M5 21h14"></path>
+            </svg>
+            <span>PNGをダウンロード</span>
+          </button>
+        </section>
+
+        <section class="preview-panel" aria-label="プレビュー">
+          <div class="preview-heading">
+            <div>
+              <p class="panel-kicker">仕上がり</p>
+              <h2>プレビュー</h2>
+            </div>
+            <span class="preview-status"><span aria-hidden="true"></span>1280 × 720</span>
+          </div>
+
+          <div class="preview-stage">
+            <div class="canvas-frame">
+              <canvas id="thumbnailCanvas" width="1280" height="720"></canvas>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
 
     <script src="script.js"></script>
   </body>
